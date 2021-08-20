@@ -1,8 +1,10 @@
+const breedName = process.argv[2];
+const { fetchBreedDescription } = require('./breedFetcher');
 
-const fetchBreedDescription = function(breedName, callback) {
-  request('https://api.thecatap.com/v1/breeds/search?q=' + breedName, function(error, response, body) {
-    if (error) {
-      callback();
-    }
-  });
-}
+fetchBreedDescription(breedName, (error, description) => {
+  if (error) {
+    console.log('Error fetch details:', error);
+  } else {
+    console.log(description);
+  }
+})

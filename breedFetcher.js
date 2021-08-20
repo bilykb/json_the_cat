@@ -1,23 +1,17 @@
-const catName = process.argv[2];
 const request = require('request');
 
-const breedFetcher = breedName => {
 
-  request('https://api.thecatap.com/v1/breeds/search?q=' + breedName, function(error, response, body) {
+const fetchBreedDescription = function(breedName, callback) {
+  request('https://api.thecatapi.com/v1/breeds/search?q=' + breedName, function(error, response, body) {
     if (error) {
-      return console.log(error);
-    }
-    
-    const data = JSON.parse(body);
-    if (response.statusCode !== 200) {
-      const data = JSON.parse(body);
-      console.log(data.message);
-    } else if (!data.length) {
-      console.log(`Please ensure this breed: "${breedName}" is a valid feline breed`);
+      callback(error, null);
     } else {
-      console.log(data["0"].description);
+      const data = JSON.parse(body);
+      callback(null, data["0"].description)
     }
-  });
-};
+    });
+}
 
-breedFetcher(catName);
+module.exports = {
+  fetchBreedDescription
+}
